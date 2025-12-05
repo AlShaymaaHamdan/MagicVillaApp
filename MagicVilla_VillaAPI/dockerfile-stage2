@@ -1,0 +1,12 @@
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
+WORKDIR /app
+
+# COPY --from=build /app/publish .
+
+# ASP.NET Core default port inside docker
+# ENV ASPNETCORE_URLS=http://+:8080
+# ENV ASPNETCORE_ENVIRONMENT="Development"
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet", "MagicVilla_VillaAPI.dll"]

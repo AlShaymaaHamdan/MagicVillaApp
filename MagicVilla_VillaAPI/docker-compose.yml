@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  app-stage1:
+    build:
+      context: .
+      dockerfile: dockerfile-stage1
+    container_name: magicvilla_app-stage1
+    volumes:
+      - shared-data:/app/publish
+    networks:
+      - magicvilla-network
+
+  app-stage2:
+    build:
+      context: .
+      dockerfile: dockerfile-stage2
+    container_name: magicvilla_app-stage2
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    volumes:
+      - shared-data:/app  # mount stage1 output here
+    ports:
+      - "8080:8080"
+    networks:
+      - magicvilla-network
+    depends_on:
+      - app-stage1
+
+volumes:
+  shared-data:
+
+networks:
+  magicvilla-network:
