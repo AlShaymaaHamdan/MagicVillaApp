@@ -9,6 +9,6 @@ curl -o actions-runner-linux-x64-2.331.0.tar.gz -L https://github.com/actions/ru
 # Extract the installer
 tar xzf ./actions-runner-linux-x64-2.331.0.tar.gz
 # Create the runner and start the configuration experience
-./config.sh --url https://github.com/AlShaymaaHamdan/MagicVillaApp --token AYIB5E5SNXPLRGHMOFRSESLJQTVTQ
+./config.sh --url https://github.com/AlShaymaaHamdan/MagicVillaApp --token ** # add token
 # Last step, run it!
 ./run.sh

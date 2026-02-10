@@ -45,7 +45,7 @@ def lambda_handler(event, context):
     tar xzf ./actions-runner-linux-x64-2.331.0.tar.gz
  
     # Create the runner and start the configuration experience
-    ./config.sh --url https://github.com/AlShaymaaHamdan/MagicVillaApp --token AYIB5E26SMLYGNLA5O5AKHDJQUD4U
+    ./config.sh --url https://github.com/AlShaymaaHamdan/MagicVillaApp --token ** # add token
     ./run.sh
 """
 
