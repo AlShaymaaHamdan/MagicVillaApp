@@ -33,7 +33,7 @@ def lambda_handler(event, context):
     ec2 = boto3.client("ec2", region_name=region)
     iam = boto3.client('iam', region_name=region)
     
-    # FIXED: Proper user data script
+    # user data script to setup the runner and install terraform and ansible
     user_data_content = f"""#!/bin/bash
     # Create runner directory
     mkdir -p /home/ubuntu/actions-runner
@@ -56,6 +56,20 @@ def lambda_handler(event, context):
     ./svc.sh start
 
     echo "GitHub Actions Runner setup complete!"
+
+    #install Ansible
+    sudo apt update
+    sudo apt upgrade -y
+    sudo add-apt-repository ppa:ansible/ansible
+    sudo apt update
+    sudo apt install software-properties-common
+    sudo add-apt-repository --yes --update ppa:ansible/ansible
+    sudo apt install ansible -y
+
+    # install Terraform
+    wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    sudo apt update && sudo apt install terraform
     """
 
     # Encode to Base64
