@@ -25,29 +25,38 @@ def lambda_handler(event, context):
     Instance_Type = "t2.micro"
     SG = ["sg-0621a41f5d9e7a735"]
     
-    # Get GitHub token from environment variable (SECURE METHOD)
-    github_token = "AYIB5E23YQ2TLGKMPGTFWKTJQUDW6"
-    
-    github_org = "AlShaymaaHamdan"
-    github_repo = "MagicVillaApp"
+    # Get GitHub token from environment variable
+    github_token = os.environ.get("github_token")
+    github_org = os.environ.get("github_org")
+    github_repo = os.environ.get("github_repo")
     
     ec2 = boto3.client("ec2", region_name=region)
     iam = boto3.client('iam', region_name=region)
     
     # FIXED: Proper user data script
     user_data_content = f"""#!/bin/bash
-    # Create a folder
-    cd /home
-    mkdir actions-runner && cd actions-runner# Download the latest runner package
+    # Create runner directory
+    mkdir -p /home/ubuntu/actions-runner
+    cd /home/ubuntu/actions-runner
+
+    # Download runner
     curl -o actions-runner-linux-x64-2.331.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.331.0/actions-runner-linux-x64-2.331.0.tar.gz
-    
-    # Extract the installer
+
+    # Extract
     tar xzf ./actions-runner-linux-x64-2.331.0.tar.gz
- 
-    # Create the runner and start the configuration experience
-    ./config.sh --url https://github.com/AlShaymaaHamdan/MagicVillaApp --token ** # add token
-    ./run.sh
-"""
+
+    # Set ownership
+    chown -R ubuntu:ubuntu /home/ubuntu/actions-runner
+
+    # Configure runner as ubuntu
+    sudo -u ubuntu ./config.sh --url https://github.com/{github_org}/{github_repo} --token {github_token} --unattended
+
+    # Install and start service
+    ./svc.sh install ubuntu
+    ./svc.sh start
+
+    echo "GitHub Actions Runner setup complete!"
+    """
 
     # Encode to Base64
     encoded_user_data = base64.b64encode(user_data_content.encode('utf-8')).decode('utf-8')
@@ -56,7 +65,7 @@ def lambda_handler(event, context):
     profile_name = 'gh-runner-profile'
     role_name = 'gh-runner-role'  # This role must already exist
 
-    # FIXED: Create profile BEFORE launching instance
+    # Create profile BEFORE launching instance
     print(f"Setting up IAM instance profile: {profile_name}")
     
     try:
@@ -142,17 +151,3 @@ def lambda_handler(event, context):
                 'error': str(e)
             }
         }
-
-
-# For testing locally (optional)
-if __name__ == "__main__":
-    import sys
-    
-    # Set environment variable for testing
-    os.environ['GITHUB_TOKEN'] = 'ghp_YOUR_TOKEN_HERE'
-    
-    result = lambda_handler({}, None)
-    print("\n" + "="*50)
-    print("RESULT:")
-    print("="*50)
-    print(result)
