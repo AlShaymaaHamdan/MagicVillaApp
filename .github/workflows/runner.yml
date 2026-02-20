@@ -1,16 +1,21 @@
-# name: Test Self-Hosted Runner
+name: Infrastructure Provision
 
-# on:
-#   workflow_dispatch:
-#   push:
-#     branches:
-#       - main
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   installation:
-#     runs-on: [Linux]
+jobs:
+  installation:
+    runs-on: [Linux]
 
-#     steps:
-#       - name: 
-#         run: |
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        
+      - name: Terraform Plan
+        run: terraform plan
+
+
           

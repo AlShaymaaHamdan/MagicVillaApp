@@ -14,3 +14,7 @@ output "github_secret_access_key" {
   value       = aws_iam_access_key.gh_key.secret
   sensitive   = true
 }
+
+output "instance_profile_name" {
+  value = aws_iam_instance_profile.this.name
+}

@@ -1,0 +1,145 @@
+---
+- name: Install Docker, AWS CLI, microk8s, nginx
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+# Install Docker on Ubuntu using official Docker repo
+    - name: Ensure dependencies are installed
+      ansible.builtin.package:
+        name:
+          - bc
+          - curl
+          - expect
+          - git
+          - ca-certificates
+        state: present
+
+    - name: Create Docker GPG key directory
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
+
+    - name: Download Docker's official GPG key
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: "0644"
+
+    - name: Add Docker repository to Apt sources
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+        filename: docker
+
+    - name: Update apt cache after adding Docker repository
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install Docker and Docker Compose
+      ansible.builtin.package:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+
+    - name: Ensure Docker service is enabled and started
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add ubuntu user to docker group
+      ansible.builtin.user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+---
+# Install AWS CLI on Ubuntu
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install required packages for AWS CLI
+      apt:
+        name:
+          - curl
+          - unzip
+        state: present
+
+    - name: Download AWS CLI installer
+      get_url:
+        url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+        dest: "/tmp/awscliv2.zip"
+
+    - name: Unzip AWS CLI installer
+      unarchive:
+        src: "/tmp/awscliv2.zip"
+        dest: "/tmp"
+        remote_src: yes
+
+    - name: Run AWS CLI installer
+      command: "/tmp/aws/install"
+
+    - name: Verify AWS CLI installation
+      command: "aws --version"
+      register: aws_cli_version
+
+    - name: Display AWS CLI version
+      debug:
+        msg: "{{ aws_cli_version.stdout }}"
+
+# install nginx
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: latest
+        update_cache: yes
+
+    - name: Add user to group root
+      user:
+        name: "ubuntu"
+        groups: root
+        state: present
+
+    - name: Remove default nginx configuration
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    # - name: Add nginx configuration
+    #   copy:
+    #     src: <control-node-path-to>/static-site-config
+    #     dest: /etc/nginx/sites-available/
+    #     owner: "{{ user }}"
+    #     group: root
+    #     mode: '0644'
+
+    # - name: Enable website configuration
+    #   file:
+    #     src: /etc/nginx/sites-available/static-site-config
+    #     dest: /etc/nginx/sites-enabled/static-site-config
+    #     state: link
+
+    - name: Ensure nginx is running
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+# install microk8s
+    - name: Install microk8s
+      snap:
+        name:
+          - microk8s
+        classic: yes
+      become: true
