@@ -33,6 +33,7 @@ module "ec2" {
   security_group_ids    = [module.security.security_group_id]
   instance_profile_name = module.iam.instance_profile_name
   environment           = var.environment
+  key_name = var.key_name
   # user_data             = file("${path.module}/user_data.sh")
 }
 
