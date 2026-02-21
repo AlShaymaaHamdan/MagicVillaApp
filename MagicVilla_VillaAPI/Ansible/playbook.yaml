@@ -4,30 +4,22 @@
 
   tasks:
 # Install Docker on Ubuntu using official Docker repo
-    - name: Install prerequisites for Docker repo
+    - name: Install Docker via official repo
       apt:
-        name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - gnupg-agent
-          - software-properties-common
+        name: docker.io
         state: present
 
-    - name: Add Docker GPG key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
+    - name: Ensure Docker is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
 
-    - name: Add Docker repo
-      apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
-        state: present
-
-    - name: Install Docker CE
-      apt:
-        name: docker-ce
-        state: latest
+    - name: Add user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
 
 # Install AWS CLI on Ubuntu
     - name: Update apt package index
@@ -107,4 +99,16 @@
         name:
           - microk8s
         classic: yes
+        state: latest
+      become: true
+    
+    - name: Add user to microk8s group
+      user:
+        name: ubuntu
+        groups: microk8s
+        append: yes
+      become: true
+
+    - name: Enable DNS and storage addons
+      command: microk8s enable dns storage
       become: true
