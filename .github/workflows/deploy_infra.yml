@@ -13,12 +13,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # Save SSH private key from GitHub Secrets
-      - name: Create SSH Key
-        run: |
-          echo "${{ secrets.KEY }}" > /tmp/key.pem
-          chmod 600 /tmp/key.pem
-
       - name: Terraform Init
         run: terraform init
         working-directory: MagicVilla_VillaAPI/Terraform/env/prod
@@ -44,12 +38,21 @@ jobs:
     runs-on: [Linux]
     needs: terraform
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Download inventory
         uses: actions/download-artifact@v4
         with:
           name: ansible-inventory
           path: MagicVilla_VillaAPI/Ansible/inventory.yaml
 
+      # Save SSH private key from GitHub Secrets
+      - name: Create SSH Key
+        run: |
+          echo "${{ secrets.KEY }}" > /tmp/key.pem
+          chmod 600 /tmp/key.pem
+          
       - name: Apply Playbook to configure the server
         run: ansible-playbook -i inventory.yaml playbook.yml
         working-directory: MagicVilla_VillaAPI/Ansible
