@@ -3,10 +3,6 @@
   become: true
 
   tasks:
-    - name: Update apt cache
-      ansible.builtin.apt:
-        update_cache: yes
-
 # Install Docker on Ubuntu using official Docker repo
     - name: install dependencies
       apt:
@@ -19,7 +15,7 @@
         - curl
         - gnupg-agent
         - software-properties-common
-        
+
     - name: add GPG key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
