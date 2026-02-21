@@ -1,4 +1,3 @@
----
 - name: Install Docker, AWS CLI, microk8s, nginx
   hosts: all
   become: true
@@ -63,7 +62,6 @@
         groups: docker
         append: yes
 
----
 # Install AWS CLI on Ubuntu
     - name: Update apt package index
       apt:

@@ -44,6 +44,7 @@ all:
       ansible_host: ${module.ec2.public_ip}
       ansible_user: ubuntu
       ansible_ssh_private_key_file: /tmp/key.pem
+      ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 EOL
 
   filename = "../../../Ansible/inventory.yaml"
