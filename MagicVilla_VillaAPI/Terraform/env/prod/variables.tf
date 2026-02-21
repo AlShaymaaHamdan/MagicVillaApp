@@ -2,21 +2,21 @@
 # EC2
 #################################
 
-variable "ami_id" {
-  description = "AMI ID for prod server"
-  type        = string
-}
+# variable "ami_id" {
+#   description = "AMI ID for prod server"
+#   type        = string
+# }
 
 
-variable "subnet_id" {
-  description = "Subnet where EC2 will be deployed"
-  type        = string
-}
+# variable "subnet_id" {
+#   description = "Subnet where EC2 will be deployed"
+#   type        = string
+# }
 
-variable "security_group_ids" {
-  description = "Security groups attached to EC2"
-  type        = list(string)
-}
+# variable "security_group_ids" {
+#   description = "Security groups attached to EC2"
+#   type        = list(string)
+# }
 
 #################################
 # Common tags
