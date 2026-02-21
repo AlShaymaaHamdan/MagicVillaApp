@@ -103,7 +103,6 @@
         name:
           - microk8s
         classic: yes
-        state: latest
       become: true
     
     - name: Add user to microk8s group
