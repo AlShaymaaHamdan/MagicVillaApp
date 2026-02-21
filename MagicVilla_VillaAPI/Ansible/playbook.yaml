@@ -4,66 +4,30 @@
 
   tasks:
 # Install Docker on Ubuntu using official Docker repo
-    - name: install dependencies
+    - name: Install prerequisites for Docker repo
       apt:
-        name: "{{item}}"
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
         state: present
-        update_cache: yes
-      loop:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - gnupg-agent
-        - software-properties-common
 
-    - name: add GPG key
+    - name: Add Docker GPG key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
 
-    - name: add docker repository to apt
+    - name: Add Docker repo
       apt_repository:
-        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
         state: present
-        
-    - name: install docker
+
+    - name: Install Docker CE
       apt:
-        name: "{{item}}"
+        name: docker-ce
         state: latest
-        update_cache: yes
-      loop:
-        - docker-ce
-        - docker-ce-cli
-        - containerd.io
-
-    - name: check docker is active
-      service:
-        name: docker
-        state: started
-        enabled: yes
-
-    - name: Ensure group "docker" exists
-      ansible.builtin.group:
-        name: docker
-        state: present
-
-    - name: adding ubuntu to docker group
-      user:
-        name: ubuntu
-        groups: docker
-        append: yes
-
-    - name: Install docker-compose
-      get_url:
-        url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
-        dest: /usr/local/bin/docker-compose
-        mode: 'u+x,g+x'
-
-    - name: Change file ownership, group and permissions
-      ansible.builtin.file:
-        path: /usr/local/bin/docker-compose
-        owner: ubuntu
-        group: ubuntu
 
 # Install AWS CLI on Ubuntu
     - name: Update apt package index
