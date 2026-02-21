@@ -40,7 +40,8 @@ resource "local_file" "ansible_inventory" {
   content = <<EOL
 all:
   hosts:
-    ${module.ec2.public_ip}:
+    app-server:
+      ansible_host: ${module.ec2.public_ip}
       ansible_user: ubuntu
       ansible_ssh_private_key_file: /tmp/key.pem
 EOL
