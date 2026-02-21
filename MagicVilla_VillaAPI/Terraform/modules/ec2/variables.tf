@@ -34,6 +34,10 @@ variable "instance_profile_name" {
 #   default     = null
 # }
 
+variable "key_name" {
+  description = "Existing EC2 Key Pair name"
+  type        = string
+}
 
 variable "environment" {
   description = "Environment name"
