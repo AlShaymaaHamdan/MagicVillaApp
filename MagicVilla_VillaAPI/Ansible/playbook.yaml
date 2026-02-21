@@ -4,6 +4,10 @@
 
   tasks:
 # Install Docker on Ubuntu using official Docker repo
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
     - name: Install Docker via official repo
       apt:
         name: docker.io
