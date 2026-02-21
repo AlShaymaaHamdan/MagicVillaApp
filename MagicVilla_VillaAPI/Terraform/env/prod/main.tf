@@ -45,5 +45,5 @@ all:
       ansible_ssh_private_key_file: /tmp/key.pem
 EOL
 
-  filename = "MagicVilla_VillaAPI/Ansible/inventory.yaml"
+  filename = "../../../Ansible/inventory.yaml"
 }
