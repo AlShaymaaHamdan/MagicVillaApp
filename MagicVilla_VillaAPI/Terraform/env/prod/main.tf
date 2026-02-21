@@ -38,9 +38,12 @@ module "ec2" {
 
 resource "local_file" "ansible_inventory" {
   content = <<EOL
-[prod_servers]
-${module.ec2.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=/tmp/key.pem
+all:
+  hosts:
+    ${module.ec2.public_ip}:
+      ansible_user: ubuntu
+      ansible_ssh_private_key_file: /tmp/key.pem
 EOL
 
-  filename = "Ansible/inventory.yaml"
+  filename = "MagicVilla_VillaAPI/Ansible/inventory.yaml"
 }
