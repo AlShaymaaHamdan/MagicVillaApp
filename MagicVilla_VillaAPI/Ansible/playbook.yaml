@@ -49,7 +49,10 @@
         remote_src: yes
 
     - name: Run AWS CLI installer
-      command: "/tmp/aws/install"
+      command: /tmp/aws/install --update
+      args:
+        creates: /usr/local/bin/aws  # prevents re-running if already exists
+      become: true
 
     - name: Verify AWS CLI installation
       command: "aws --version"
