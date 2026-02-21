@@ -7,10 +7,6 @@ variable "ami_id" {
   type        = string
 }
 
-variable "instance_type" {
-  description = "EC2 instance type"
-  type        = string
-}
 
 variable "subnet_id" {
   description = "Subnet where EC2 will be deployed"
@@ -26,10 +22,10 @@ variable "security_group_ids" {
 # Common tags
 #################################
 
-variable "environment" {
-  description = "Environment name"
-  type        = string
-}
+# variable "environment" {
+#   description = "Environment name"
+#   type        = string
+# }
 #################################
 # EC2 Variables
 #################################

@@ -12,8 +12,8 @@ module "vpc" {
   environment        = var.environment
 }
 
-module "sg" {
-  source      = "../../modules/sg"
+module "security" {
+  source      = "../../modules/security"
   vpc_id      = module.vpc.vpc_id
   name        = "prod-ec2-sg"
   environment = "prod"
@@ -30,7 +30,7 @@ module "ec2" {
   name                  = "${var.environment}-server"
   instance_type         = var.instance_type
   subnet_id             = module.vpc.public_subnet_id
-  security_group_ids    = [module.sg.security_group_id]
+  security_group_ids    = [module.security.security_group_id]
   instance_profile_name = module.iam.instance_profile_name
   environment           = var.environment
   # user_data             = file("${path.module}/user_data.sh")
