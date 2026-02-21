@@ -2,9 +2,6 @@ name: Infrastructure Provision
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
 
 jobs:
   terraform:
@@ -52,9 +49,9 @@ jobs:
         run: |
           echo "${{ secrets.KEY }}" > /tmp/key.pem
           chmod 600 /tmp/key.pem
-          
+
       - name: Apply Playbook to configure the server
-        run: ansible-playbook -i inventory.yaml playbook.yml
+        run: ansible-playbook -i inventory.yaml playbook.yaml
         working-directory: MagicVilla_VillaAPI/Ansible
 
 
