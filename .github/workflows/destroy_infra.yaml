@@ -1,0 +1,17 @@
+name: Destroy Infrastructure
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  terraform:
+    runs-on: [Linux]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
+        working-directory: MagicVilla_VillaAPI/Terraform/env/prod
