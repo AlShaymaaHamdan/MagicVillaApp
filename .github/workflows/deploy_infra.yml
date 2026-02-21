@@ -9,7 +9,6 @@ on:
 jobs:
   terraform:
     runs-on: [Linux]
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -31,13 +30,16 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
         working-directory: MagicVilla_VillaAPI/Terraform/env/prod
+      
+      - name: debug inventory
+        run: cat MagicVilla_VillaAPI/Ansible/inventory.yaml
 
       - name: Upload inventory
         uses: actions/upload-artifact@v4
         with:
           name: ansible-inventory
           path: MagicVilla_VillaAPI/Ansible/inventory.yaml
-      
+       
   ansible:
     runs-on: [Linux]
     needs: terraform
