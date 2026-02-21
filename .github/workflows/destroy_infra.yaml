@@ -11,7 +11,11 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        
+
+      - name:
+        run: terraform init
+        working-directory: MagicVilla_VillaAPI/Terraform/env/prod
+
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
         working-directory: MagicVilla_VillaAPI/Terraform/env/prod
