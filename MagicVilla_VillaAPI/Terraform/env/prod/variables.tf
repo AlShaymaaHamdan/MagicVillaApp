@@ -56,3 +56,7 @@ variable "availability_zone" {
   description = "Availability zone for public subnet"
   type        = string
 }
+variable "key_name" {
+  description = "Existing EC2 Key Pair name"
+  type        = string
+}

@@ -34,6 +34,7 @@ variable "instance_profile_name" {
 #   default     = null
 # }
 
+
 variable "environment" {
   description = "Environment name"
   type        = string

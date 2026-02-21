@@ -27,7 +27,7 @@ resource "aws_instance" "app_server" {
   subnet_id              = var.subnet_id
   vpc_security_group_ids = var.security_group_ids
   iam_instance_profile   = var.instance_profile_name
-
+  key_name               = var.key_name
 #   user_data = var.user_data
 
   tags = {
