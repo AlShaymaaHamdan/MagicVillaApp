@@ -51,10 +51,6 @@ def lambda_handler(event, context):
     # Configure runner as ubuntu
     sudo -u ubuntu ./config.sh --url https://github.com/{github_org}/{github_repo} --token {github_token} --unattended
 
-    # Install and start service
-    ./svc.sh install ubuntu
-    ./svc.sh start
-
     echo "GitHub Actions Runner setup complete!"
 
     #install Ansible
@@ -70,6 +66,31 @@ def lambda_handler(event, context):
     wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
     sudo apt update && sudo apt install terraform
+
+    # Install AWSCLI
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
+
+    # Install Docker
+    echo "Installing Docker..."
+    sudo apt-get update
+    sudo apt-get install -y ca-certificates curl gnupg lsb-release
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo systemctl enable docker
+    sudo systemctl start docker
+
+    # Allow ubuntu user to run docker without sudo
+    sudo usermod -aG docker ubuntu
+
+    # Install and start service
+    ./svc.sh install ubuntu
+    ./svc.sh start
     """
 
     # Encode to Base64
