@@ -1,4 +1,4 @@
-instance_type      = "t2.medium"
+instance_type      = "t3.medium"
 key_name = "key"
 environment        = "prod"
 
