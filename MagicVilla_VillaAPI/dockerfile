@@ -1,22 +1,20 @@
+# runtime only not builder
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 
+WORKDIR /dotnet-app
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
+COPY ./dotnet-app/publish .
 
-COPY *.csproj .
-RUN dotnet restore
+RUN useradd -r -s /bin/false appuser && \
+    chown -R appuser /dotnet-app
+USER appuser
 
-COPY . .
-RUN dotnet publish -c Release -o /app/publish
-
-# Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
-WORKDIR /app
-
-COPY --from=build /app/publish .
-
-# ASP.NET Core default port inside docker
-ENV ASPNETCORE_URLS=http://+:8080
-ENV ASPNETCORE_ENVIRONMENT="Development"
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "MagicVilla_VillaAPI.dll"]
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+
+# debug purposes
+# RUN apt-get update && apt-get upgrade -y && apt-get install curl net-tools -y && netstat -tlnp
+
+# Define the entry point for the container
+ENTRYPOINT ["dotnet"]
+CMD ["MagicVilla_VillaAPI.dll"]

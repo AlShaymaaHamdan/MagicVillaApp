@@ -21,7 +21,7 @@ module "security" {
 
 module "ecr" {
   source      = "../../modules/ecr"
-  name        = "prod-app"
+  name        = "dotnet-app"
   environment = "prod"
 }
 

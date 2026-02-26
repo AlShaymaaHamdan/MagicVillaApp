@@ -42,6 +42,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: magicvilla_api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     expose:
       - "8080"
     networks:

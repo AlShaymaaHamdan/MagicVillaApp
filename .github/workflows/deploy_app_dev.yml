@@ -1,0 +1,98 @@
+# name: CI/CD .NET App
+
+# on:
+#   push:
+#     branches: [ "dev"]
+
+# env:
+#   IMAGE_NAME: dotnet-app
+
+# jobs:
+#     prepare: 
+#       runs-on: [Linux]
+#       steps:
+#         - name: Checkout repo
+#           uses: actions/checkout@v4
+
+#         - uses: actions/setup-dotnet@v3
+#           with:
+#             dotnet-version: '7.0.x'
+
+#         - name: Get version
+#           run: |
+#             VERSION=$(dotnet msbuild MagicVilla_VillaAPI.csproj -getProperty:Version)
+#             echo "VERSION=$VERSION" >> $GITHUB_ENV
+#             echo "version: \"$VERSION\"" > version.yaml
+#             ls -l
+
+#         - name:  Debugging the extracted Version
+#           run: echo $VERSION
+
+#         - name: Upload Version artifact
+#           uses: actions/upload-artifact@v4
+#           with:
+#             name: version
+#             path: version.yaml
+
+#     build:
+#       runs-on: [Linux]
+#       needs: prepare
+#       steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Download artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: version
+
+#       - name: Load version into enviroment
+#         run: |
+#             VERSION=$(grep 'version' version.yaml | cut -d'"' -f2)
+#             echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+#       - name: Package dotnet app
+#         run: dotnet publish -c Release -o ./publish
+#         working-directory: ${{ github.workspace }}/dotnet-app
+
+#       - name: Upload dist artifacts to S3
+#         run: |
+#           aws s3 cp ./publish s3://alshaymaa/dotnet-app/publish-${{ env.VERSION }} --recursive
+
+            
+#     docker:
+#       runs-on: [Linux]
+#       needs: build
+#       steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Download artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: version
+
+#       - name: Load version into enviroment
+#         run: |
+#             VERSION=$(grep 'version' version.yaml | cut -d'"' -f2)
+#             echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+#       - name: Debugging the extracted Version
+#         run: echo $VERSION
+
+#       - name: Download artifact from S3
+#         run: |
+#           aws s3 cp s3://alshaymaa/dotnet-app/publish ./dotnet-app/publish-${{ env.VERSION }}  --recursive
+
+#       - name: debugging artifact
+#         run: |
+#             ls -l ./dotnet-app
+#             ls -l ./dotnet-app/publish
+          
+#       - name: Build and push image 
+#         uses: docker/build-push-action@v6 
+#         with:
+#           context: .
+#           file: dotnet-app/Dockerfile
+#           push: true
+#           tags: ${{ secrets.AWS_ECR_URI }}/dotnet-app:${{ env.VERSION }}
