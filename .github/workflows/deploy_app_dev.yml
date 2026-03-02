@@ -5,7 +5,7 @@ on:
     branches: [ "dev"]
 
 env:
-  IMAGE_NAME: dotnet-app
+  IMAGE_NAME: magicvilla_villaapi
 
 jobs:
     prepare: 
@@ -108,4 +108,4 @@ jobs:
           context: .
           file: MagicVilla_VillaAPI/dockerfile
           push: true
-          tags: ${{ secrets.AWS_ECR_URI }}/MagicVilla_VillaAPI:${{ env.VERSION }}
+          tags: ${{ secrets.AWS_ECR_URI }}/${{ IMAGE_NAME }}:${{ env.VERSION }}
