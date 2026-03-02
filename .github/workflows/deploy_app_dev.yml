@@ -71,7 +71,7 @@ jobs:
       - name: Upload dist artifacts to S3
         run: |
           aws s3 cp ./publish s3://alshaymaa/dotnet-app/publish-${{ env.VERSION }} --recursive
-
+        working-directory: ${{ github.workspace }}/MagicVilla_VillaAPI
             
     docker:
       runs-on: [Linux]
