@@ -7,6 +7,8 @@ on:
 env:
   IMAGE_NAME: magicvilla_villaapi
 
+outputs:
+      ecr_uri: ${{ steps.get_ecr.outputs.ecr_uri }}
 jobs:
     prepare: 
       runs-on: [Linux]
@@ -80,6 +82,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Terraform Init
+        run: terraform init
+        working-directory: MagicVilla_VillaAPI/Terraform/env/prod
+
+      - name: Get ECR URI from Terraform output
+        id: get_ecr
+        run: |
+          ECR_URI=$(terraform output -raw ecr_uri)
+          echo "ECR_URI=$ECR_URI"
+          echo "ecr_uri=$ECR_URI" >> $GITHUB_OUTPUT
+
+        working-directory: MagicVilla_VillaAPI/Terraform/env/prod
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
@@ -108,4 +122,4 @@ jobs:
           context: .
           file: MagicVilla_VillaAPI/dockerfile
           push: true
-          tags: ${{ secrets.AWS_ECR_URI }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          tags: ${{ needs.docker.outputs.ecr_uri }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
