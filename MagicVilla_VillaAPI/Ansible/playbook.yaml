@@ -115,10 +115,22 @@
         append: yes
       become: true
 
+    - name: Restart microk8s to ensure clean initialization
+      command: snap restart microk8s
+      become: true
+
     - name: Wait for microk8s to be ready
-      command: microk8s status --wait-ready --timeout 120
-      become: yes
+      command: microk8s status --wait-ready --timeout 180
+      become: true
+      retries: 3
+      delay: 15
+      register: mk8s_status
+      until: mk8s_status.rc == 0
       
     - name: Enable DNS and storage addons
       command: microk8s enable dns storage
       become: true
+
+    - name: Wait for microk8s to be ready
+      command: microk8s status --wait-ready --timeout 180
+      become: yes      
