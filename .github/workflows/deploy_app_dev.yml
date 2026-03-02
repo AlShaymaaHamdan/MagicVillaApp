@@ -39,7 +39,7 @@ jobs:
       steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
@@ -62,6 +62,11 @@ jobs:
       - name: Package dotnet app
         run: dotnet publish -c Release -o ./publish
         working-directory: ${{ github.workspace }}/MagicVilla_VillaAPI
+
+      - name: Get version
+        run: |
+          ls -la
+          ls -la MagicVilla_VillaAPI
 
       - name: Upload dist artifacts to S3
         run: |
