@@ -47,8 +47,8 @@ jobs:
       # Save SSH private key from GitHub Secrets
       - name: Create SSH Key
         run: |
-          echo "${{ secrets.KEY }}" > /tmp/key.pem
-          chmod 400 /tmp/key.pem
+          sudo echo "${{ secrets.KEY }}" > /tmp/key.pem
+          sudo chmod 400 /tmp/key.pem
 
       - name: Apply Playbook to configure the server
         run: ansible-playbook -i inventory.yaml playbook.yaml
