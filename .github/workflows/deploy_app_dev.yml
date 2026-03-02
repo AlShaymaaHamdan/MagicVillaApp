@@ -100,7 +100,7 @@ jobs:
       - name: debugging artifact
         run: |
             ls -l ./MagicVilla_VillaAPI
-            ls -l ./MagicVilla_VillaAPI/publish
+            ls -l ./MagicVilla_VillaAPI/publish-${{ env.VERSION }}
           
       - name: Build and push image 
         uses: docker/build-push-action@v6 
