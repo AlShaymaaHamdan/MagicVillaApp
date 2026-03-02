@@ -61,7 +61,7 @@ jobs:
 
       - name: Package dotnet app
         run: dotnet publish -c Release -o ./publish
-        working-directory: ${{ github.workspace }}/dotnet-app
+        working-directory: ${{ github.workspace }}/MagicVilla_VillaAPI
 
       - name: Upload dist artifacts to S3
         run: |
