@@ -47,6 +47,7 @@ jobs:
       # Save SSH private key from GitHub Secrets
       - name: Create SSH Key
         run: |
+          rm -f /tmp/key.pem
           echo "${{ secrets.KEY }}" > /tmp/key.pem
           chmod 600 /tmp/key.pem
 
