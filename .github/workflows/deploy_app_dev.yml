@@ -99,8 +99,8 @@ jobs:
 
       - name: debugging artifact
         run: |
-            ls -l ./dotnet-app
-            ls -l ./dotnet-app/publish
+            ls -l ./MagicVilla_VillaAPI
+            ls -l ./MagicVilla_VillaAPI/publish
           
       - name: Build and push image 
         uses: docker/build-push-action@v6 
