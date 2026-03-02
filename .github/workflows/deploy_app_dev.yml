@@ -108,4 +108,4 @@ jobs:
           context: .
           file: MagicVilla_VillaAPI/dockerfile
           push: true
-          tags: ${{ secrets.AWS_ECR_URI }}/${{ IMAGE_NAME }}:${{ env.VERSION }}
+          tags: ${{ secrets.AWS_ECR_URI }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
