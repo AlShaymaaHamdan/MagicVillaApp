@@ -25,11 +25,8 @@ jobs:
 
         - name: Get version
           run: |
-            dotnet --version
-            ls -la
-            
-            dotnet msbuild MagicVilla_VillaAPI.csproj -getProperty:Version
-            VERSION=$(dotnet msbuild MagicVilla_VillaAPI.csproj -getProperty:Version)
+            grep -oP '(?<=<Version>)[^<]+' MagicVilla_VillaAPI.csproj
+            VERSION=$(grep -oP '(?<=<Version>)[^<]+' MagicVilla_VillaAPI.csproj)
             echo "VERSION=$VERSION" >> $GITHUB_ENV
             echo "version: \"$VERSION\"" > version.yaml
             ls -l
