@@ -95,7 +95,7 @@ jobs:
 
       - name: Download artifact from S3
         run: |
-          aws s3 cp s3://alshaymaa/dotnet-app/publish ./dotnet-app/publish-${{ env.VERSION }}  --recursive
+          aws s3 cp s3://shaymaahamdan/dotnet-app/publish ./MagicVilla_VillaAPI/publish-${{ env.VERSION }}  --recursive
 
       - name: debugging artifact
         run: |
@@ -106,6 +106,6 @@ jobs:
         uses: docker/build-push-action@v6 
         with:
           context: .
-          file: dotnet-app/Dockerfile
+          file: MagicVilla_VillaAPI/dockerfile
           push: true
-          tags: ${{ secrets.AWS_ECR_URI }}/dotnet-app:${{ env.VERSION }}
+          tags: ${{ secrets.AWS_ECR_URI }}/MagicVilla_VillaAPI:${{ env.VERSION }}
