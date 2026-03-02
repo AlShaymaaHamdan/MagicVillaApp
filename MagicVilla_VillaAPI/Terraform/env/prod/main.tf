@@ -1,6 +1,6 @@
 module "iam" {
   source    = "../../modules/iam"
-  role_name = "prod-server-role"
+  role_name = "server-role"
 }
 
 module "vpc" {
@@ -15,7 +15,7 @@ module "vpc" {
 module "security" {
   source      = "../../modules/security"
   vpc_id      = module.vpc.vpc_id
-  name        = "prod-ec2-sg"
+  name        = "ec2-sg"
   environment = "prod"
 }
 
