@@ -26,8 +26,9 @@ jobs:
         - name: Get version
           run: |
             ls -la
-            grep -oP '(?<=<Version>)[^<]+' /MagicVilla_VillaAPI/MagicVilla_VillaAPI.csproj
-            VERSION=$(grep -oP '(?<=<Version>)[^<]+' /MagicVilla_VillaAPI/MagicVilla_VillaAPI.csproj)
+            ls -la MagicVilla_VillaAPI
+            grep -oP '(?<=<Version>)[^<]+' MagicVilla_VillaAPI/MagicVilla_VillaAPI.csproj
+            VERSION=$(grep -oP '(?<=<Version>)[^<]+' MagicVilla_VillaAPI/MagicVilla_VillaAPI.csproj)
             echo "VERSION=$VERSION" >> $GITHUB_ENV
             echo "version: \"$VERSION\"" > version.yaml
             ls -l
