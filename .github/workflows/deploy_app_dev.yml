@@ -17,6 +17,11 @@ jobs:
         - uses: actions/setup-dotnet@v3
           with:
             dotnet-version: '7.0.x'
+          env:
+            DOTNET_INSTALL_DIR: /home/ubuntu/.dotnet  # writable by runner user
+            
+        - name: Add dotnet to PATH
+          run: echo "/home/ubuntu/.dotnet" >> $GITHUB_PATH
 
         - name: Get version
           run: |
