@@ -90,6 +90,7 @@ jobs:
       - name: Get ECR URI from Terraform output
         id: get_ecr
         run: |
+          df -h
           terraform init
           echo "ECR_URI=$(terraform output -raw repository_url)" >> $GITHUB_ENV
 
