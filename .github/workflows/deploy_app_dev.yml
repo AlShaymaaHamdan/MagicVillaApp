@@ -7,8 +7,6 @@ on:
 env:
   IMAGE_NAME: magicvilla_villaapi
 
-outputs:
-      ecr_uri: ${{ steps.get_ecr.outputs.ecr_uri }}
 jobs:
     prepare: 
       runs-on: [Linux]
@@ -78,6 +76,9 @@ jobs:
     docker:
       runs-on: [Linux]
       needs: build
+      outputs:
+      ecr_uri: ${{ steps.get_ecr.outputs.ecr_uri }}
+      
       steps:
       - name: Checkout code
         uses: actions/checkout@v4
