@@ -77,8 +77,8 @@ jobs:
       runs-on: [Linux]
       needs: build
       outputs:
-      ecr_uri: ${{ steps.get_ecr.outputs.ecr_uri }}
-      
+        ecr_uri: ${{ steps.get_ecr.outputs.ecr_uri }}
+
       steps:
       - name: Checkout code
         uses: actions/checkout@v4
