@@ -83,14 +83,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Terraform Init
-        run: terraform init
-        working-directory: MagicVilla_VillaAPI/Terraform/env/prod
+      # - name: Terraform Init
+      #   run: terraform init
+      #   working-directory: MagicVilla_VillaAPI/Terraform/env/prod
 
       - name: Get ECR URI from Terraform output
         id: get_ecr
         run: |
-          cd terraform
+          cd terraform/env/prod
           terraform init
           echo "ECR_URI=$(terraform output -raw repository_url)" >> $GITHUB_ENV
 
