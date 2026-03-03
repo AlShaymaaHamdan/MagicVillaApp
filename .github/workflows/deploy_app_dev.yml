@@ -90,7 +90,7 @@ jobs:
       - name: Get ECR URI from Terraform output
         id: get_ecr
         run: |
-          cd Terraform/env/prod
+          cd /MagicVilla_VillaAPI/Terraform/env/prod
           terraform init
           echo "ECR_URI=$(terraform output -raw repository_url)" >> $GITHUB_ENV
 
