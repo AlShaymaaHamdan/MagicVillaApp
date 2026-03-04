@@ -91,11 +91,10 @@ jobs:
         id: get_ecr
         run: |
           df -h
-          du -sh ~/* | sort -rh | head -20
-          terraform init
+          terraform init -input=false -no-color > /dev/null 2>&1
           echo "ECR_URI=$(terraform output -raw repository_url)" >> $GITHUB_ENV
-
         working-directory: MagicVilla_VillaAPI/Terraform/env/prod
+        
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
